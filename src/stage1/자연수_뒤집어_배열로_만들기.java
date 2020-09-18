@@ -36,9 +36,6 @@ public class 자연수_뒤집어_배열로_만들기 {
 			answer[i] = arr.get(i);
 		}
 		
-//		for(int i = 0;i<arr.size();i++) {
-//			System.out.print(arr.get(i)+" ");
-//		}
 		for(int i = 0;i<answer.length;i++) {
 			System.out.print(answer[i]+" ");
 		}
