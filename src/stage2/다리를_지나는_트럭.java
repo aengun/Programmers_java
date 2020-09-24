@@ -12,8 +12,8 @@ public class 다리를_지나는_트럭 {
 		int c[] = { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
 
 		System.out.println(solution(2, 10, a));
-		System.out.println(solution(100, 100, b));
-		System.out.println(solution(100, 100, c));
+//		System.out.println(solution(100, 100, b));
+//		System.out.println(solution(100, 100, c));
 
 	}
 
@@ -21,29 +21,35 @@ public class 다리를_지나는_트럭 {
 		int answer = 0;
 
 		Queue<Truck> waiting = new LinkedList<>();
-		Queue<Truck> bridge = new LinkedList<>();
-
 		for (int i = 0; i < truck_weights.length; i++) {
-			waiting.offer(new Truck(truck_weights[i], 0));
+			Truck t = new Truck(truck_weights[i], 0);
+			waiting.add(t);
 		}
 
-		int time = 0;
-		int totalWeight = 0;
+		Queue<Truck> bridge = new LinkedList<>();
 
+		int nowWeight = 0;
 		while (!waiting.isEmpty() || !bridge.isEmpty()) {
-			if(totalWeight<=weight) {
-				if(!bridge.isEmpty()) {
-					Truck t = bridge.peek();
-					if(time-t.entry>=bridge_length) {
-						
-					}
+			answer++;
+
+			// 우선 더 담을 수 있는지 확인
+			if (nowWeight <= weight) {
+				int test = nowWeight;
+				if (test + bridge.peek().truckWeight <= weight) {
+					Truck t = waiting.poll();
+					bridge.add(t);
 				}
 			}
 
-			
+			for (Truck t : bridge) {
+				t.time++;
+			}
+
+			for (Truck t : bridge) {
+				if (t.time == bridge_length)
+					bridge.poll();
+			}
 		}
-		
-		answer = time;
 
 		return answer;
 	}
@@ -51,11 +57,11 @@ public class 다리를_지나는_트럭 {
 }
 
 class Truck {
-	int weight;
-	int entry;
+	int truckWeight;
+	int time;
 
-	Truck(int weight, int entry) {
-		this.weight = weight;
-		this.entry = entry;
+	public Truck(int truckWeight, int time) {
+		this.truckWeight = truckWeight;
+		this.time = time;
 	}
 }
