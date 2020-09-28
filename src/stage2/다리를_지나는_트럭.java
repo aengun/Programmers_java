@@ -1,5 +1,6 @@
 package stage2;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -12,8 +13,10 @@ public class 다리를_지나는_트럭 {
 		int c[] = { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
 
 		System.out.println(solution(2, 10, a));
-//		System.out.println(solution(100, 100, b));
-//		System.out.println(solution(100, 100, c));
+		System.out.println();
+		System.out.println(solution(100, 100, b));
+		System.out.println();
+		System.out.println(solution(100, 100, c));
 
 	}
 
@@ -29,15 +32,17 @@ public class 다리를_지나는_트럭 {
 		Queue<Truck> bridge = new LinkedList<>();
 
 		int nowWeight = 0;
-		while (!waiting.isEmpty() || !bridge.isEmpty()) {
+
+		while (!bridge.isEmpty() || !waiting.isEmpty()) {
+
 			answer++;
 
-			// 우선 더 담을 수 있는지 확인
-			if (nowWeight <= weight) {
-				int test = nowWeight;
-				if (test + bridge.peek().truckWeight <= weight) {
+			if (nowWeight <= weight && !waiting.isEmpty()) {
+				int testWeight = waiting.peek().truckWeight;
+				if (nowWeight + testWeight <= weight) {
 					Truck t = waiting.poll();
 					bridge.add(t);
+					nowWeight += testWeight;
 				}
 			}
 
@@ -45,13 +50,25 @@ public class 다리를_지나는_트럭 {
 				t.time++;
 			}
 
-			for (Truck t : bridge) {
-				if (t.time == bridge_length)
-					bridge.poll();
+//			for (Truck t : bridge) {
+//				if (t.time >= bridge_length) {
+//					nowWeight -= bridge.peek().truckWeight;
+//					bridge.poll();
+//				}
+//			}
+
+			Iterator<Truck> iter = bridge.iterator();
+			while (iter.hasNext()) {
+				Truck t = iter.next();
+				if (t.time >= bridge_length) {
+					nowWeight -= bridge.peek().truckWeight;
+					iter.remove();
+				}
 			}
+
 		}
 
-		return answer;
+		return answer + 1;
 	}
 
 }
